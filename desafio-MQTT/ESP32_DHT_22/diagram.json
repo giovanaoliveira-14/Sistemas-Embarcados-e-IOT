@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 14.44, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht1", "top": -182.1, "left": 33, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "sw1", "top": 148.4, "left": -54.5, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "dht1:SDA", "esp:4", "green", [ "v57.6", "h76.9", "v153.6" ] ],
+    [ "dht1:VCC", "esp:3V3", "red", [ "v38.4", "h-48", "v57.6" ] ],
+    [ "dht1:GND", "esp:GND.2", "black", [ "v38.4", "h96", "v9.6" ] ],
+    [ "sw1:3", "esp:GND.2", "green", [ "v-172.8", "h144.2" ] ],
+    [ "sw1:2", "esp:32", "green", [ "v-86.4", "h57.7" ] ],
+    [ "sw1:1", "esp:5V", "green", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
