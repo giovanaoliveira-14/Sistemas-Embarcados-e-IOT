@@ -1,0 +1,20 @@
+{
+  "name": "sistemas-embarcados-e-iot",
+  "version": "1.0.0",
+  "description": "Repositório dedicado aos conteúdos das aulas de Sistemas Embarcados e IOT do Curso de Bacharelado em Ciência da Computação",
+  "homepage": "https://github.com/giovanaoliveira-14/Sistemas-Embarcados-e-IOT#readme",
+  "bugs": {
+    "url": "https://github.com/giovanaoliveira-14/Sistemas-Embarcados-e-IOT/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giovanaoliveira-14/Sistemas-Embarcados-e-IOT.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
