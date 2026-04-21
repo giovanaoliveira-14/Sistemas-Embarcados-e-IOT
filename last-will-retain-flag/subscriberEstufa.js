@@ -19,8 +19,6 @@ client.on("connect", () => {
   client.subscribe("estufa/temp/ambiente", { qos: 0 });
   client.subscribe("estufa/agua/nivel", { qos: 1 });
   client.subscribe("estufa/alerta/incendio", { qos: 2 });
-
-  // 👇 NOVO: status do sistema
   client.subscribe("estufa/status", { qos: 1 });
 });
 
@@ -47,8 +45,8 @@ client.on("message", (topic, msg) => {
     console.log(`${tipo} RECEBIDA:`, mensagem);
   }
 
-    if (topic === "estufa/status") {
-        console.log("📡 STATUS DO SISTEMA:", mensagem);
-        return;
-    }
+  if (topic === "estufa/status") {
+      console.log("📡 STATUS DO SISTEMA:", mensagem);
+      return;
+  }
 });

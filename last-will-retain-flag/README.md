@@ -1,16 +1,11 @@
 # Last Will Retain Flag
 
-##  Introdução
-
 No protocolo MQTT, existem mecanismos que ajudam a garantir a confiabilidade da comunicação entre dispositivos. Um desses mecanismos é o uso do **Last Will and Testament (LWT)** combinado com a **flag de retenção (retain)**.
-
----
 
 ##  O que é Last Will (LWT)?
 
-O *Last Will* é uma mensagem configurada por um cliente MQTT que será enviada automaticamente pelo broker caso esse cliente se desconecte de forma inesperada.
-
-Isso é útil para informar outros dispositivos de que um cliente ficou offline.
+O Last Will funciona como um “aviso automático”.
+Se o dispositivo cair inesperadamente, o broker envia uma mensagem avisando que ele ficou offline.
 
 ### Exemplo:
 
@@ -25,7 +20,6 @@ sensor/status → "offline"
 ##  O que é Retain Flag?
 
 A flag `retain` indica que o broker deve armazenar a última mensagem publicada em um tópico.
-
 Assim, qualquer novo cliente que se inscrever nesse tópico receberá imediatamente essa última mensagem.
 
 ---
@@ -71,7 +65,7 @@ sensor/status → "offline" (retain: true)
 
 ###  Last Will (LWT)
 
-Use quando você precisa detectar falhas inesperadas.
+Quando você precisa detectar falhas inesperadas.
 
 **Exemplos:**
 
@@ -83,7 +77,7 @@ Use quando você precisa detectar falhas inesperadas.
 
 ###  Retain Flag
 
-Use quando é importante saber o **último estado** de um tópico.
+Quando é importante saber o **último estado** de um tópico.
 
 **Exemplos:**
 
@@ -93,9 +87,9 @@ Use quando é importante saber o **último estado** de um tópico.
 
 ---
 
-###  Last Will + Retain (melhor combinação)
+###  Last Will + Retain
 
-Use quando você quer garantir que o estado do dispositivo seja sempre conhecido, mesmo após falhas.
+Quando você quer garantir que o estado do dispositivo seja sempre conhecido, mesmo após falhas.
 
 **Exemplos:**
 
@@ -109,21 +103,9 @@ Use quando você quer garantir que o estado do dispositivo seja sempre conhecido
 
 Em sistemas IoT reais, essa combinação traz vários benefícios:
 
-###  Detecção rápida de falhas
-
-Se um dispositivo cair, o sistema é informado automaticamente.
-
----
-
-###  Estado sempre atualizado
-
-Mesmo novos dispositivos ou dashboards conseguem saber imediatamente se um sensor está online ou offline.
-
----
-
-###  Maior confiabilidade
-
-Evita decisões baseadas em dados desatualizados (ex: achar que um sensor está funcionando quando não está).
+ * Detecção rápida de falhas: Se um dispositivo cair, o sistema é informado automaticamente.
+ * Estado sempre atualizado: Mesmo novos dispositivos ou dashboards conseguem saber imediatamente se um sensor está online ou offline.
+ * Maior confiabilidade: Evita decisões baseadas em dados desatualizados (ex: achar que um sensor está funcionando quando não está).
 
 ---
 
@@ -135,10 +117,75 @@ Evita decisões baseadas em dados desatualizados (ex: achar que um sensor está 
 
 ---
 
-##  Conclusão
+## Escolha dos QoS
 
-O uso do Last Will com a flag retain permite manter o estado atualizado dos dispositivos em um sistema MQTT, mesmo em casos de falha inesperada.
+Cada tipo de dado possui um nível de criticidade diferente:
 
-Essa combinação é essencial em sistemas IoT, pois aumenta a confiabilidade, melhora o monitoramento e evita erros causados por desconexões não detectadas.
+- 🌡 Temperatura (QoS 0)
+  - Dados frequentes e não críticos
+  - Perder uma leitura não afeta o sistema
+
+- 💧 Nível de água (QoS 1)
+  - Informação importante
+  - Pode ser reenviada, mesmo com duplicação
+
+- 🔥 Incêndio (QoS 2)
+  - Evento crítico
+  - Não pode ser perdido nem duplicado
 
 ---
+
+## Como rodar o projeto
+
+ * Subir o broker MQTT: No terminal, rode o comando:
+ ```
+ docker-compose up -d
+ ```
+ * Após isso, abra o terminal e rode:
+ ```
+ node subscriberEstufa.js // Saída esperada: Subscriber conectado
+ ```
+ * Abra outro terminal e rode:
+ ```
+ node publisherEstufa.js // Saída esperada: Publisher conectado 🌡 Enviado: ...
+ ```
+ 
+---
+
+## Testes Realizados
+
+### Teste 1 - Retain
+
+ * Deixei o projeto executando:
+
+![Passo 1](../images/teste1_passo_1.png)
+ * Parei o subscriber:
+
+![Passo 2](../images/teste1_passo_2.png)
+ * Ativei novamente o subscriber:
+
+![Passo 3](../images/teste1_passo_3.png)
+
+**Conclusão**: O retain está funcionando, pois ele recebeu algo que foi enviado no passado.
+
+### Teste 2 - Last Will
+
+ * Deixei o projeto em execução:
+
+![Passo 1](../images/teste2_passo_1.png)
+ * Encerrei o publisher:
+
+![Passo 2](../images/teste2_passo_2.png)
+
+**Conclusão**: O Last Will está funcionando, o broker enviou a mensagem sozinho quando o publisher foi encerrado, informando que o sensor estava offline
+
+### Teste 3 - Retain após falha
+
+ * Permaneci com o publisher encerrado:
+
+![Passo 1](../images/teste3_passo_1.png)
+ * Reiniciei o subscriber:
+
+![Passo 2](../images/teste3_passo_2.png)
+
+**Conclusão**: O Last Will e retain estão funcionando juntos 

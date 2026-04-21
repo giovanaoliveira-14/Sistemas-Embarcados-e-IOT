@@ -1,6 +1,5 @@
 import mqtt from "mqtt";
 
-// 🔥 CONFIGURAÇÃO DO LAST WILL
 const options = {
   will: {
     topic: "estufa/status",
@@ -20,11 +19,8 @@ let enviadas = {
 
 client.on("connect", () => {
   console.log("Publisher conectado");
-
-  // ✅ PUBLICA QUE ESTÁ ONLINE (COM RETAIN)
   client.publish("estufa/status", "online", { retain: true });
 
-  // 🌡 Temperatura (QoS 0)
   setInterval(() => {
     const msg = `Temp: ${Math.random() * 30}`;
     client.publish("estufa/temp/ambiente", msg, { qos: 0 });
@@ -32,7 +28,6 @@ client.on("connect", () => {
     console.log("🌡 Enviado:", msg);
   }, 5000);
 
-  // 💧 Água (QoS 1)
   setInterval(() => {
     const msg = `Nivel: ${Math.random() * 100}`;
     client.publish("estufa/agua/nivel", msg, { qos: 1 });
@@ -40,7 +35,6 @@ client.on("connect", () => {
     console.log("💧 Enviado:", msg);
   }, 30000);
 
-  // 🔥 Incêndio (QoS 2)
   setInterval(() => {
     const incendio = Math.random() < 0.2;
 
