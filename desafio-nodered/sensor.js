@@ -11,14 +11,13 @@ client.on("connect", () => {
     const umidadeSala = (40 + Math.random() * 20).toFixed(2);
     const umidadeQuarto = (45 + Math.random() * 15).toFixed(2);
 
-    client.publish("casa/sala/temperatura", tempSala);
-    client.publish("casa/sala/umidade", umidadeSala);
+    client.publish("casa/sala/temperatura", tempSala, { qos: 1 });
+    client.publish("casa/sala/umidade", umidadeSala, { qos: 1 });
 
-    client.publish("casa/quarto/temperatura", tempQuarto);
-    client.publish("casa/quarto/umidade", umidadeQuarto);
+    client.publish("casa/quarto/temperatura", tempQuarto, { qos: 1 });
+    client.publish("casa/quarto/umidade", umidadeQuarto, { qos: 1 });
 
     console.log("Sala:", tempSala, umidadeSala);
     console.log("Quarto:", tempQuarto, umidadeQuarto);
-
   }, 2000);
 });
