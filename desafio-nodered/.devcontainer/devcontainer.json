@@ -1,0 +1,15 @@
+{
+  "name": "Node-RED Codespace",
+  "build": {
+    "dockerfile": "../Dockerfile"
+  },
+  "forwardPorts": [1880],
+  "postCreateCommand": "npm install -g node-red-dashboard",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}
